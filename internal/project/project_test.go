@@ -6,7 +6,16 @@ import (
 )
 
 func TestSafeRelativePath(t *testing.T) {
-	for _, input := range []string{"../outside", "a/../../outside", "/absolute", "."} {
+	for _, input := range []string{
+		"../outside",
+		"a/../../outside",
+		"/absolute",
+		".",
+		"C:/absolute",
+		"C:relative",
+		`C:\absolute`,
+		`\\server\share`,
+	} {
 		if _, err := SafeRelativePath(input); err == nil {
 			t.Errorf("SafeRelativePath(%q) expected error", input)
 		}

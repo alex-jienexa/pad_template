@@ -3,6 +3,7 @@ package project
 import (
 	"errors"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -44,11 +45,34 @@ func IsEmpty(path string) (bool, error) {
 	return len(entries) == 0, nil
 }
 
-// SafeRelativePath rejects paths that could escape the destination root.
-func SafeRelativePath(path string) (string, error) {
-	clean := filepath.Clean(filepath.FromSlash(path))
-	if clean == "." || filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
+func SafeRelativePath(name string) (string, error) {
+	// Template paths use portable slash-separated paths.
+	// Reject OS-specific separators and rooted paths before conversion.
+	if name == "" || strings.Contains(name, `\`) || strings.HasPrefix(name, "/") {
 		return "", errors.New("unsafe template path")
 	}
-	return clean, nil
+
+	// Reject Windows drive-prefixed paths on every operating system.
+	if len(name) >= 2 &&
+		((name[0] >= 'A' && name[0] <= 'Z') ||
+		(name[0] >= 'a' && name[0] <= 'z')) &&
+		name[1] == ':' {
+			return "", errors.New("unsafe template path")
+		}
+
+		// Normalize using slash-based path semantics.
+		clean := path.Clean(name)
+
+		if clean == "." || clean == ".." || strings.HasPrefix(clean, "../") {
+			return "", errors.New("unsafe template path")
+		}
+
+		// Convert only after portable path validation.
+		result := filepath.FromSlash(clean)
+
+		if filepath.IsAbs(result) || filepath.VolumeName(result) != "" {
+			return "", errors.New("unsafe template path")
+		}
+
+		return result, nil
 }
