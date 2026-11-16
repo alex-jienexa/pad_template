@@ -1,0 +1,29 @@
+# Go
+/bin/
+/dist/
+*.test
+*.out
+coverage*.txt
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Local tooling
+.tmp/
+.cache/
+.prompts/

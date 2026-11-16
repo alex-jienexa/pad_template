@@ -1,0 +1,8 @@
+# Example local Git configuration. Review before applying with `git config`.
+# This file is documentation only and is not an active Git configuration.
+[init]
+	defaultBranch = main
+[pull]
+	ff = only
+[fetch]
+	prune = true

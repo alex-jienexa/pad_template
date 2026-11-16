@@ -1,0 +1,31 @@
+# PAD project configuration. Replace all example values before starting work.
+version: "1.0"
+project:
+  name: "{{PROJECT_NAME}}"
+  description: "{{PROJECT_DESCRIPTION}}"
+  repository: "{{REPOSITORY_URL}}"
+  default_branch: "main"
+  primary_language: "{{PRIMARY_LANGUAGE}}"
+  created_at: "{{DATE_YYYY_MM_DD}}"
+agent_policy:
+  autonomy: "controlled" # read_only | controlled | delegated
+  require_approval_for:
+    - destructive_git_operations
+    - dependency_major_updates
+    - public_api_changes
+    - production_deployments
+    - secrets_or_permissions_changes
+  allow_local_commits: true
+  allow_remote_push: false
+state:
+  current_file: ".agent/state/current.yaml"
+  handoff_file: ".agent/state/HANDOFF.md"
+tasks:
+  directory: ".agent/tasks"
+  id_prefix: "TASK"
+  default_assignee: "unassigned"
+template:
+  source: "https://github.com/alex-jienexa/pad_template"
+  version: "1.0.0"
+  update_strategy: "three_way_merge"
+  base_directory: ".pad/template-base"

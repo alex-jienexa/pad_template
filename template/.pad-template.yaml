@@ -1,0 +1,11 @@
+schema_version: "1.0"
+template:
+  id: "pad-project-starter"
+  version: "1.0.0"
+  minimum_cli_version: "1.0.0"
+  managed_paths:
+    - "AGENTS.md"
+    - "pad.yaml"
+    - ".agent/**"
+  preserve_unmanaged_files: true
+  deletion_policy: "manual_review"

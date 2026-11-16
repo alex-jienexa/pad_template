@@ -1,0 +1,30 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# Local PAD runtime/cache
+.pad/cache/
+.pad/tmp/
+
+# Common build artifacts
+bin/
+dist/
+build/
+coverage/
+*.test
+*.out
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+.pad/update-backups/
+.pad/update-conflicts/

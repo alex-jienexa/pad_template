@@ -1,0 +1,18 @@
+schema_version: "1.0"
+required_front_matter:
+  - id
+  - title
+  - type
+  - status
+  - created_at
+  - updated_at
+fields:
+  id: "^[A-Z][A-Z0-9]*-REQ-[0-9]{3,}$"
+  type: [functional, non_functional, constraint]
+  status: [proposed, approved, implemented, verified, deprecated]
+  priority: [must, should, could, wont]
+  verification: [test, inspection, analysis, demonstration, manual]
+  owner: string
+  related_requirements: list[string]
+  related_tasks: list[string]
+  tags: list[string]

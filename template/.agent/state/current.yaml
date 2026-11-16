@@ -1,0 +1,16 @@
+schema_version: "1.0"
+project_status: initializing # initializing | active | paused | maintenance | archived
+health: unknown # healthy | at_risk | blocked | unknown
+updated_at: null # ISO 8601 timestamp with timezone, e.g. 2026-11-16T19:00:00+03:00
+current_focus: "Complete project context and verify the development workflow"
+active_task: TASK-001
+active_branch: null
+last_checkpoint: null
+last_verified_commit: null
+open_blockers: []
+next_actions:
+  - "Complete .agent/context/PROJECT.md"
+  - "Verify setup, build, and test commands"
+  - "Update this snapshot and HANDOFF.md"
+recent_changes: []
+risks: []

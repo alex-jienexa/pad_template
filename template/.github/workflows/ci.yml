@@ -1,0 +1,23 @@
+name: Project checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  placeholder-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify PAD structure
+        run: |
+          test -f AGENTS.md
+          test -f pad.yaml
+          test -f .agent/state/current.yaml
+          test -f .agent/state/HANDOFF.md
+          test -f .agent/protocols/RECOVERY.md
