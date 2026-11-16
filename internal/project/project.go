@@ -46,33 +46,42 @@ func IsEmpty(path string) (bool, error) {
 }
 
 func SafeRelativePath(name string) (string, error) {
-	// Template paths use portable slash-separated paths.
-	// Reject OS-specific separators and rooted paths before conversion.
-	if name == "" || strings.Contains(name, `\`) || strings.HasPrefix(name, "/") {
+	if name == "" {
 		return "", errors.New("unsafe template path")
 	}
 
-	// Reject Windows drive-prefixed paths on every operating system.
-	if len(name) >= 2 &&
-		((name[0] >= 'A' && name[0] <= 'Z') ||
-		(name[0] >= 'a' && name[0] <= 'z')) &&
-		name[1] == ':' {
-			return "", errors.New("unsafe template path")
-		}
+	// Normalize both Unix and Windows separators.
+	// This allows native relative paths produced by filepath.Join.
+	portable := strings.ReplaceAll(name, `\`, "/")
 
-		// Normalize using slash-based path semantics.
-		clean := path.Clean(name)
+	// Reject rooted paths, including Windows paths rooted at the
+	// current drive and UNC paths.
+	if strings.HasPrefix(portable, "/") {
+		return "", errors.New("unsafe template path")
+	}
 
-		if clean == "." || clean == ".." || strings.HasPrefix(clean, "../") {
-			return "", errors.New("unsafe template path")
-		}
+	// Reject Windows drive-prefixed paths on every OS.
+	if len(portable) >= 2 &&
+		((portable[0] >= 'A' && portable[0] <= 'Z') ||
+			(portable[0] >= 'a' && portable[0] <= 'z')) &&
+		portable[1] == ':' {
+		return "", errors.New("unsafe template path")
+	}
 
-		// Convert only after portable path validation.
-		result := filepath.FromSlash(clean)
+	// Normalize using portable slash-based path semantics.
+	clean := path.Clean(portable)
 
-		if filepath.IsAbs(result) || filepath.VolumeName(result) != "" {
-			return "", errors.New("unsafe template path")
-		}
+	if clean == "." ||
+		clean == ".." ||
+		strings.HasPrefix(clean, "../") {
+		return "", errors.New("unsafe template path")
+	}
 
-		return result, nil
+	result := filepath.FromSlash(clean)
+
+	if filepath.IsAbs(result) || filepath.VolumeName(result) != "" {
+		return "", errors.New("unsafe template path")
+	}
+
+	return result, nil
 }

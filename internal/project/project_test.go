@@ -24,6 +24,20 @@ func TestSafeRelativePath(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
+	windowsPath, err := SafeRelativePath(
+		`.agent\state\current.yaml`,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if windowsPath != filepath.Join(
+		".agent",
+		"state",
+		"current.yaml",
+	) {
+		t.Fatalf("unexpected Windows path: %q", windowsPath)
+	}
 	if got != filepath.Join(".agent", "tasks", "TASK-001.md") {
 		t.Fatalf("unexpected safe path: %q", got)
 	}
